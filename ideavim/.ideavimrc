@@ -1,0 +1,13 @@
+" connect with system clipboard
+set clipboard+=unnamed
+
+" quickly reload .ideavimrc
+noremap <Leader>r <ESC>:w<CR><ESC>:source ~/.ideavimrc<cr>
+
+" copy to both - vim registry and Intellij clipboard
+nnoremap yy <ESC>:action EditorCopy<CR><ESC>yy
+xnoremap y :action EditorCopy<CR><ESC>gvy
+
+" paste from history
+map <leader>p :action PasteMultiple<CR>
+
