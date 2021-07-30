@@ -91,7 +91,7 @@ end)
 
 local movementFn = function(modifier, direction) 
   print(direction) 
-  print("let the record show that" .. direction .. "was pressed")
+  print("let the record show that " .. direction .. " was pressed")
   hs.eventtap.keyStroke(modifier, direction, 0) 
 end
 
@@ -100,13 +100,22 @@ upfn = function() print'let the record show that K was pressed'; hs.eventtap.key
 leftfn = function() print'let the record show that H was pressed'; hs.eventtap.keyStroke({}, 'left', 0) end
 rightfn = function() print'let the record show that L was pressed'; hs.eventtap.keyStroke({}, 'right', 0) end
 
-hjkl = hs.hotkey.modal.new('cmd-shift', 'd')
-function hjkl:entered() hs.alert'Entered hjkl mode' end
-function hjkl:exited()  hs.alert'Exited hjkl mode'  end
-hjkl:bind({}, 'escape', function() hjkl:exit() end)
+enterfn = function() print'let the record show that O was pressed'; hs.eventtap.keyStroke({}, 'return', 0) end
+
+vim_mode = hs.hotkey.modal.new({"ctrl", "alt", "cmd"}, ';')
+function vim_mode:entered() hs.alert.show('Entered vim mode', {}, 0.5) end
+function vim_mode:exited()  hs.alert.show('Exited vim mode', {}, 0.5)  end
+local all_keys = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'}
+hs.fnutils.each(all_keys, function(key) vim_mode:bind({}, key, function() hs.alert.show('vim mode', {}, 0.3) end) end)
+vim_mode:bind({}, ';', function() vim_mode:exit() end)
+vim_mode:bind({}, 'i', function() vim_mode:exit() end)
+vim_mode:bind({}, 'o', enterfn)
+vim_mode:bind({}, 'q', function() end)
+-- todo this makes 'o' recursive
+-- vim_mode:bind({}, 'return', function() vim_mode:exit() enterfn() end)
 
 local bindModalAndKeyToDirection = function(modal, key, direction) 
-    hjkl:bind(modal, key, {}, function() movementFn(modal, direction) end, {}, function() movementFn(modal, direction) end)
+    vim_mode:bind(modal, key, {}, function() movementFn(modal, direction) end, {}, function() movementFn(modal, direction) end)
 end
   
 local combineModalAndKeys = function(modal)
