@@ -1,3 +1,9 @@
+
+
+          
+   
+-- print("combinations " .. tobits(5))
+
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
       hs.alert.show(
          "Hello World!",
@@ -131,4 +137,35 @@ local combineModalAndKeys = function(modal)
   )
 end
 
-hs.fnutils.each({ {}, {'shift'}, {'option'}, {'shift', 'option'}, {'cmd'}, {'cmd', 'shift'} }, function(modal) combineModalAndKeys(modal) end)
+local all_modal_combinations = {{}, {'shift'}, {'option'}, {'ctrl'}, {'cmd'}, {'shift', 'option'}, {'shift', 'ctrl'}, {'shift', 'cmd'}, {'option', 'ctrl'}, {'option', 'cmd'}, {'ctrl', 'cmd'}, {'shift', 'option', 'ctrl'}, {'shift', 'option', 'cmd'}, {'shift', 'ctrl', 'cmd'}, {'option', 'ctrl', 'cmd'}, {'shift', 'option', 'ctrl', 'cmd'}}
+hs.fnutils.each(all_modal_combinations, function(modal) combineModalAndKeys(modal) end)
+--hs.fnutils.each({ {}, {'shift'}, {'option'}, {'shift', 'option'}, {'cmd'}, {'cmd', 'shift'} }, function(modal) combineModalAndKeys(modal) end)
+
+--function tobits(num)
+--    local t={}
+--    while num>0 do
+--        rest=num%2
+--        t[#t+1]=(rest == 1)
+--        num=(num-rest)//2
+--    end
+--    return t
+--end
+--
+----for i,v in ipairs(tobits(5)) do print("printing " .. i .. " " .. v) end                     
+--for i,v in ipairs(tobits(5)) do print(v) end                     
+--
+--local all_modal_keys = {'shift', 'ctrl', 'option', 'cmd'} 
+--
+--count = 0
+--for _ in pairs(all_modal_keys) do count = count + 1 end
+--print("count " .. count)
+--local modal_keys_count = count
+--
+--for i=1,count*2 do 
+--  for i,v in ipairs(tobits(i)) do print(v) end                     
+--  local boolarray = tobits(i)
+--
+--  print("-----")
+--end
+
+
