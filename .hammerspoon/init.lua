@@ -113,6 +113,7 @@ function vim_mode:entered() hs.alert.show('Entered vim mode', {}, 0.5) end
 function vim_mode:exited()  hs.alert.show('Exited vim mode', {}, 0.5)  end
 local all_keys = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '[', ']', '\\', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', '\'', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/'}
 hs.fnutils.each(all_keys, function(key) vim_mode:bind({}, key, function() hs.alert.show('vim mode', {}, 0.3) end) end)
+hs.fnutils.each(all_keys, function(key) vim_mode:bind({'shift'}, key, function() hs.alert.show('vim mode', {}, 0.3) end) end)
 vim_mode:bind({}, ';', function() vim_mode:exit() end)
 vim_mode:bind({}, 'i', function() vim_mode:exit() end)
 vim_mode:bind({}, 'o', enterfn)
