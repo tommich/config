@@ -184,9 +184,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     local nextScreen = screen:next()
     local rect = nextScreen:fullFrame()
     local center = hs.geometry.rectMidPoint(rect)
-
-    -- hs.mouse.setRelativePosition(center, nextScreen)
     hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
 end)
 
 -- Move Mouse to center of previous Monitor
@@ -195,36 +194,63 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'left', function()
     local nextScreen = screen:previous()
     local rect = nextScreen:fullFrame()
     local center = hs.geometry.rectMidPoint(rect)
-
-    -- hs.mouse.setRelativePosition(center, nextScreen)
     hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
+end)
+
+-- Move Mouse to center of first screen
+hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '1', function()
+    local screen = hs.screen.primaryScreen()
+    local nextScreen = screen:previous():previous()
+    local rect = nextScreen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
+end)
+
+-- Move Mouse to center of second screen
+hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '2', function()
+    local screen = hs.screen.primaryScreen()
+    local nextScreen = screen:previous()
+    local rect = nextScreen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
 end)
 
 
-
-
+-- Move Mouse to center of third screen
+hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '3', function()
+    local screen = hs.screen.primaryScreen()
+    local nextScreen = screen
+    local rect = nextScreen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
+end)
 
 -- move mouse to center of current screen
 local mouseCenter = function()
     local screen = hs.mouse.getCurrentScreen()
-    -- local nextScreen = screen:previous()
     local rect = screen:fullFrame()
     local center = hs.geometry.rectMidPoint(rect)
-
-    -- hs.mouse.setRelativePosition(center, nextScreen)
     hs.mouse.setAbsolutePosition(center)
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', mouseCenter)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenter)
 
 
+local edge = 1/6
+local middle = 3/6
+local highEdge = 5/6
 
 -- move mouse to upper left part of current screen
 local mouseUpperLeft = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w/6, y = frame.y + frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + edge*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', mouseUpperLeft)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', mouseUpperLeft)
@@ -233,8 +259,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', mouseUpperLeft)
 local mouseUpperCenter = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w/2, y = frame.y + frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + edge*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', mouseUpperCenter)
 
@@ -242,8 +268,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', mouseUpperCenter)
 local mouseUpperRight = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w - frame.w/6, y = frame.y + frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + edge*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', mouseUpperRight)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', mouseUpperRight)
@@ -254,8 +280,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', mouseUpperRight)
 local mouseCenterLeft = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w/6, y = frame.y + frame.h/2})
+    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + middle*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', mouseCenterLeft)
 
@@ -263,8 +289,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', mouseCenterLeft)
 local mouseCenterCenter = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w/2, y = frame.y + frame.h/2})
+    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + middle*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenterCenter)
 
@@ -272,8 +298,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenterCenter)
 local mouseCenterRight = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w - frame.w/6, y = frame.y + frame.h/2})
+    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + middle*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', mouseCenterRight)
 
@@ -283,8 +309,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', mouseCenterRight)
 local mouseLowerLeft = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w/6, y = frame.y + frame.h - frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + highEdge*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', mouseLowerLeft)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', mouseLowerLeft)
@@ -293,8 +319,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', mouseLowerLeft)
 local mouseLowerCenter = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w - frame.w/2, y = frame.y + frame.h - frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + highEdge*frame.h})
+    mouseHighlight()
 end
 -- doesn't work - used by macos
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ',', mouseLowerCenter)
@@ -304,8 +330,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', mouseLowerCenter)
 local mouseLowerRight = function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = frame.x + frame.w - frame.w/6, y = frame.y + frame.h - frame.h/6})
+    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + highEdge*frame.h})
+    mouseHighlight()
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', mouseLowerRight)
 -- doesn't work - used by macos
@@ -320,11 +346,7 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 's', function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
     local current_pos = hs.mouse.absolutePosition()
-    print("current mouse x: " .. current_pos.x)
-    print("current mouse y: " .. current_pos.y)
-    
-    hs.mouse.setAbsolutePosition({x = current_pos.x - frame.w/4, y = current_pos.y})
-
+    hs.mouse.setAbsolutePosition({x = current_pos.x - frame.w/8, y = current_pos.y})
 end)
 
 -- move mouse right a quarter of a screen
@@ -332,11 +354,7 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'f', function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
     local current_pos = hs.mouse.absolutePosition()
-    print("current mouse x: " .. current_pos.x)
-    print("current mouse y: " .. current_pos.y)
-    
-    hs.mouse.setAbsolutePosition({x = current_pos.x + frame.w/4, y = current_pos.y})
-
+    hs.mouse.setAbsolutePosition({x = current_pos.x + frame.w/8, y = current_pos.y})
 end)
 
 -- move mouse up a quarter of a screen
@@ -344,11 +362,7 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'e', function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
     local current_pos = hs.mouse.absolutePosition()
-    print("current mouse x: " .. current_pos.x)
-    print("current mouse y: " .. current_pos.y)
-    
-    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y - frame.h/4})
-
+    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y - frame.h/8})
 end)
 
 -- move mouse down a quarter of a screen
@@ -356,25 +370,45 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'd', function()
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
     local current_pos = hs.mouse.absolutePosition()
-    print("current mouse x: " .. current_pos.x)
-    print("current mouse y: " .. current_pos.y)
-    
-    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y + frame.h/4})
-
-    print("x: " .. frame.x)
-
+    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y + frame.h/8})
 end)
 
--- move mouse to upper-left corner
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'z', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local max = screen:frame()
-    
-    hs.mouse.setAbsolutePosition({x = max.x+max.w/4, y = max.y})
-
-end)
 
 -- get screen positions
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'p', function()
     local positions = hs.screen.screenPositions()
 end)
+
+---- Mouse-related stuff
+
+-- Find my mouse pointer
+
+local mouseCircle = nil
+local mouseCircleTimer = nil
+
+function mouseHighlight()
+    -- Delete an existing highlight if it exists
+    if mouseCircle then
+        mouseCircle:delete()
+        if mouseCircleTimer then
+            mouseCircleTimer:stop()
+        end
+    end
+    -- Get the current co-ordinates of the mouse pointer
+    mousepoint = hs.mouse.getAbsolutePosition ()
+    -- Prepare a big red circle around the mouse pointer
+    mouseCircle = hs.drawing.circle(hs.geometry.rect(mousepoint.x-40, mousepoint.y-40, 80, 80))
+    mouseCircle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
+    mouseCircle:setFill(false)
+    mouseCircle:setStrokeWidth(5)
+    mouseCircle:show()
+
+    -- Set a timer to delete the circle after x seconds
+    mouseCircleTimer = hs.timer.doAfter(0.2, clearHighlight)
+end
+
+function clearHighlight()
+  mouseCircle:delete()
+  mouseCircle = nil
+end
+
