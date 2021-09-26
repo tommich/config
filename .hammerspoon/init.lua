@@ -240,103 +240,82 @@ end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', mouseCenter)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenter)
 
+local moveMouseToScreenPart = function(arg)
+    local screen = hs.mouse.getCurrentScreen()
+    local frame = screen:frame()
+    hs.mouse.setAbsolutePosition({x = frame.x + arg.horizontal * frame.w, y = frame.y + arg.vertical * frame.h})
+    mouseHighlight()
+end
 
-local edge = 1/6
-local middle = 3/6
+local lowEdge = 1/6
+local center = 3/6
 local highEdge = 5/6
 
 -- move mouse to upper left part of current screen
-local mouseUpperLeft = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + edge*frame.h})
-    mouseHighlight()
+local moveMouseUpperLeft = function()
+    moveMouseToScreenPart{horizontal = lowEdge, vertical = lowEdge}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', mouseUpperLeft)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', mouseUpperLeft)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', moveMouseUpperLeft)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', moveMouseUpperLeft)
 
 -- move mouse to upper center part of current screen
-local mouseUpperCenter = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + edge*frame.h})
-    mouseHighlight()
+local moveMouseUpperCenter = function()
+    moveMouseToScreenPart{horizontal = center, vertical = lowEdge}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', mouseUpperCenter)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', moveMouseUpperCenter)
 
 -- move mouse to upper right part of current screen
-local mouseUpperRight = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + edge*frame.h})
-    mouseHighlight()
+local moveMouseUpperRight = function()
+    moveMouseToScreenPart{horizontal = highEdge, vertical = lowEdge}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', mouseUpperRight)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', mouseUpperRight)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', moveMouseUpperRight)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', moveMouseUpperRight)
 
 
 
 -- move mouse to center left part of current screen
-local mouseCenterLeft = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + middle*frame.h})
-    mouseHighlight()
+local moveMouseCenterLeft = function()
+    moveMouseToScreenPart{horizontal = lowEdge, vertical = center}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', mouseCenterLeft)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', moveMouseCenterLeft)
 
 -- move mouse to center center part of current screen
-local mouseCenterCenter = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + middle*frame.h})
-    mouseHighlight()
+local moveMouseCenterCenter = function()
+    moveMouseToScreenPart{horizontal = center, vertical = center}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenterCenter)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', moveMouseCenterCenter)
 
 -- move mouse to center right part of current screen
-local mouseCenterRight = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + middle*frame.h})
-    mouseHighlight()
+local moveMouseCenterRight = function()
+    moveMouseToScreenPart{horizontal = highEdge, vertical = center}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', mouseCenterRight)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', moveMouseCenterRight)
 
 
 
 -- move mouse to lower left part of current screen
-local mouseLowerLeft = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + edge*frame.w, y = frame.y + highEdge*frame.h})
-    mouseHighlight()
+local moveMouseLowerLeft = function()
+    moveMouseToScreenPart{horizontal = lowEdge, vertical = highEdge}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', mouseLowerLeft)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', mouseLowerLeft)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', moveMouseLowerLeft)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', moveMouseLowerLeft)
 
 -- move mouse to lower center part of current screen
-local mouseLowerCenter = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + middle*frame.w, y = frame.y + highEdge*frame.h})
-    mouseHighlight()
+local moveMouseLowerCenter = function()
+	moveMouseToScreenPart{horizontal = center, vertical = highEdge}
 end
 -- doesn't work - used by macos
--- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ',', mouseLowerCenter)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', mouseLowerCenter)
+-- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ',', moveMouseLowerCenter)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', moveMouseLowerCenter)
 
 -- move mouse to lower right part of current screen
-local mouseLowerRight = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + highEdge*frame.w, y = frame.y + highEdge*frame.h})
-    mouseHighlight()
+local moveMouseLowerRight = function()
+    moveMouseToScreenPart{horizontal = highEdge, vertical = highEdge}
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', mouseLowerRight)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', moveMouseLowerRight)
 -- doesn't work - used by macos
--- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '.', mouseLowerRight)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', mouseLowerRight)
+-- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '.', moveMouseLowerRight)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', moveMouseLowerRight)
 
 
 
@@ -411,4 +390,3 @@ function clearHighlight()
   mouseCircle:delete()
   mouseCircle = nil
 end
-
