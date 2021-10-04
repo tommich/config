@@ -317,89 +317,54 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', moveMouseInScreenLowerR
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '.', moveMouseInScreenLowerRight)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', moveMouseInScreenLowerRight)
 
+local move_mouse_relative = function(direction, magnitude)
+    local screen = hs.mouse.getCurrentScreen()
+    local frame = screen:frame()
+    local current_pos = hs.mouse.absolutePosition()
+    hs.mouse.setAbsolutePosition({x = current_pos.x + direction.horizontal * frame.w * magnitude, y = current_pos.y + direction.vertical * frame.h * magnitude})
+    mouseHighlight()
+end
 
+local small_bit = 1/12
 
+local direction_left = {horizontal = -1, vertical = 0}
+local direction_right = {horizontal = 1, vertical = 0}
+
+local direction_up_left = {horizontal = -1, vertical = -1}
+local direction_up_right = {horizontal = 1, vertical = -1}
+local direction_up = {horizontal = 0, vertical = -1}
+
+local direction_down = {horizontal = 0, vertical = 1}
+local direction_down_left = {horizontal = -1, vertical = 1}
+local direction_down_right = {horizontal = 1, vertical = 1}
 
 -- move mouse left
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 's', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x - frame.w/12, y = current_pos.y})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 's', function () move_mouse_relative(direction_left, small_bit) end)
 
 -- move mouse right
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'f', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x + frame.w/12, y = current_pos.y})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'f', function () move_mouse_relative(direction_right, small_bit) end)
 
 -- move mouse up-left
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x - frame.w/12, y = current_pos.y - frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', function () move_mouse_relative(direction_up_left, small_bit) end)
 
 -- move mouse up-right
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x + frame.w/12, y = current_pos.y - frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', function () move_mouse_relative(direction_up_right, small_bit) end)
 
 -- move mouse up
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'e', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y - frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'e', function () move_mouse_relative(direction_up, small_bit) end)
+
 
 -- move mouse down
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y + frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', function () move_mouse_relative(direction_down, small_bit) end)
 
 -- move mouse down
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'd', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x, y = current_pos.y + frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'd', function () move_mouse_relative(direction_down, small_bit) end)
 
 -- move mouse down-left
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x - frame.w/12, y = current_pos.y + frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', function () move_mouse_relative(direction_down_left, small_bit) end)
 
 -- move mouse down-right
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local frame = screen:frame()
-    local current_pos = hs.mouse.absolutePosition()
-    hs.mouse.setAbsolutePosition({x = current_pos.x + frame.w/12, y = current_pos.y + frame.h/12})
-    mouseHighlight()
-end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', function () move_mouse_relative(direction_down_right, small_bit) end)
 
 -- get screen positions
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'p', function()
