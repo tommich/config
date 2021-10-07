@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+#starts vim on mac with arguments passed from intellij
+
 whole_path="$1"
 line_number="$2"
 dir_name="$3"
