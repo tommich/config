@@ -41,61 +41,61 @@ end)
 
 -- resizing window 
 
---hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "l", function()
---  -- size focused window to right half of display
---  local win = hs.window.focusedWindow()
---  local f = win:frame()
---  local screen = win:screen()
---  local max = screen:frame()
---
---  f.x = max.x + (max.w / 2)
---  f.y = max.y
---  f.w = max.w / 2
---  f.h = max.h
---  win:setFrame(f)
---end)
---
---hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "h", function()
---  -- size focused window to left half of display
---  local win = hs.window.focusedWindow()
---  local f = win:frame()
---  local screen = win:screen()
---  local max = screen:frame()
---
---  f.x = max.x
---  f.y = max.y
---  f.w = max.w / 2
---  f.h = max.h
---  win:setFrame(f)
---end)
---
---hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "k", function()
---  -- size focused window to top half of display
---  local win = hs.window.focusedWindow()
---  local f = win:frame()
---  local screen = win:screen()
---  local max = screen:frame()
---
---  f.x = max.x
---  f.y = max.y
---  f.w = max.w
---  f.h = max.h / 2
---  win:setFrame(f)
---end)
---
---hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "j", function()
---  -- size focused window to bottom half of display
---  local win = hs.window.focusedWindow()
---  local f = win:frame()
---  local screen = win:screen()
---  local max = screen:frame()
---
---  f.x = max.x
---  f.y = max.y + (max.h / 2)
---  f.w = max.w
---  f.h = max.h / 2
---  win:setFrame(f)
---end)
+hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "right", function()
+  -- size focused window to right half of display
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  f.x = max.x + (max.w / 2)
+  f.y = max.y
+  f.w = max.w / 2
+  f.h = max.h
+  win:setFrame(f)
+end)
+
+hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "left", function()
+  -- size focused window to left half of display
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  f.x = max.x
+  f.y = max.y
+  f.w = max.w / 2
+  f.h = max.h
+  win:setFrame(f)
+end)
+
+hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "up", function()
+  -- size focused window to top half of display
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  f.x = max.x
+  f.y = max.y
+  f.w = max.w
+  f.h = max.h / 2
+  win:setFrame(f)
+end)
+
+hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "down", function()
+  -- size focused window to bottom half of display
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
+  f.x = max.x
+  f.y = max.y + (max.h / 2)
+  f.w = max.w
+  f.h = max.h / 2
+  win:setFrame(f)
+end)
 
 local movementFn = function(modifier, direction) 
   print(direction) 
@@ -178,6 +178,17 @@ end
 --  print("-----")
 --end
 
+local get_center_of_mouse_screen = function()
+    local screen = hs.mouse.getCurrentScreen()
+    local rect = screen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    return center
+end
+
+local big_magnitude = 2/6
+local moving_center = get_center_of_mouse_screen() 
+local moving_magnitude = big_magnitude 
+
 -- Move Mouse to center of next Monitor
 hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     local screen = hs.mouse.getCurrentScreen()
@@ -186,6 +197,7 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
 end)
 
 -- Move Mouse to center of previous Monitor
@@ -196,6 +208,7 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'left', function()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
 end)
 
 -- Move Mouse to center of first screen
@@ -206,6 +219,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '1', function()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
+    moving_magnitude = big_magnitude
 end)
 
 -- Move Mouse to center of second screen
@@ -216,6 +231,8 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '2', function()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
+    moving_magnitude = big_magnitude
 end)
 
 
@@ -227,18 +244,22 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '3', function()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
+    moving_magnitude = big_magnitude
 end)
 
 -- move mouse to center of current screen
-local mouseCenter = function()
+local mouse_center = function()
     local screen = hs.mouse.getCurrentScreen()
     local rect = screen:fullFrame()
     local center = hs.geometry.rectMidPoint(rect)
     hs.mouse.setAbsolutePosition(center)
     mouseHighlight()
+    moving_center = center
+    moving_magnitude = big_magnitude
 end
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', mouseCenter)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouseCenter)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', mouse_center)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouse_center)
 
 local moveMouseToScreenPart = function(arg)
     local screen = hs.mouse.getCurrentScreen()
@@ -250,8 +271,36 @@ end
 local move_mouse_relative_to_point = function(point, direction, magnitude)
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = point.x + direction.horizontal * frame.w * magnitude, y = point.y + direction.vertical * frame.h * magnitude})
+    print("frame x " .. frame.x)
+    print("frame y " .. frame.y)
+    print("frame w " .. frame.w)
+    print("frame h " .. frame.h)
+
+    --these coordinates match perfectly with close window button on my screen
+    --local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    print("margined_frame x " .. margined_frame.x)
+    print("margined_frame y " .. margined_frame.y)
+    print("margined_frame w " .. margined_frame.w)
+    print("margined_frame h " .. margined_frame.h)
+
+    local not_framed_point = {x = point.x + direction.horizontal * frame.w * magnitude, y = point.y + direction.vertical * frame.h * magnitude}
+    print("not_framed_point x " .. not_framed_point.x)
+    print("not_framed_point y " .. not_framed_point.y)
+
+    --print("moving x by: " .. direction.horizontal * margined_frame.w * magnitude)
+    --print("moving y by: " .. direction.vertical * margined_frame.h * magnitude)
+    local framed_point = {x = point.x + direction.horizontal * margined_frame.w * magnitude, y = point.y + direction.vertical * margined_frame.h * magnitude}
+    --print("new_point x " .. new_point.x)
+    --print("new_point y " .. new_point.y)
+
+    new_point = framed_point
+
+
+    hs.mouse.setAbsolutePosition(new_point)
     mouseHighlight()
+    moving_center = new_point
+    moving_magnitude = magnitude/2
 end
 
 local move_mouse_relative_to_current_position = function(direction, magnitude)
@@ -260,14 +309,11 @@ local move_mouse_relative_to_current_position = function(direction, magnitude)
 end
 
 local move_mouse_relative_to_center = function(direction, magnitude)
-    local screen = hs.mouse.getCurrentScreen()
-    local rect = screen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
+    local center = get_center_of_mouse_screen()
     --local current_pos = hs.mouse.absolutePosition()
     move_mouse_relative_to_point(center, direction, magnitude)
 end
 
-local big_bit = 2/6
 
 local direction_left = {horizontal = -1, vertical = 0}
 local direction_right = {horizontal = 1, vertical = 0}
@@ -283,41 +329,70 @@ local direction_down_right = {horizontal = 1, vertical = 1}
 local direction_zero = {horizontal = 0, vertical = 0}
 
 -- move mouse to upper left part of current screen
+local moveMouseInScreenUpperLeft = function()
+    move_mouse_relative_to_center(direction_up_left, moving_magnitude)
+end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', moveMouseInScreenUpperLeft)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', function() move_mouse_relative_to_center(direction_up_left, big_bit) end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', function() move_mouse_relative_to_point(moving_center, direction_up_left, moving_magnitude) end)
 
 -- move mouse to upper center part of current screen
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', function() move_mouse_relative_to_center(direction_up, big_bit) end)
+local moveMouseInScreenUpperCenter = function()
+    move_mouse_relative_to_center(direction_up, moving_magnitude)
+end
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', function() move_mouse_relative_to_point(moving_center, direction_up, moving_magnitude) end)
 
 -- move mouse to upper right part of current screen
+local moveMouseInScreenUpperRight = function()
+    move_mouse_relative_to_center(direction_up_right, moving_magnitude)
+end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', moveMouseInScreenUpperRight)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', function() move_mouse_relative_to_center(direction_up_right, big_bit) end)
-
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', function() move_mouse_relative_to_point(moving_center, direction_up_right, moving_magnitude) end)
 
 -- move mouse to center left part of current screen
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', function() move_mouse_relative_to_center(direction_left, big_bit) end)
+local moveMouseInScreenCenterLeft = function()
+    move_mouse_relative_to_center(direction_left, moving_magnitude)
+end
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', function() move_mouse_relative_to_point(moving_center, direction_left, moving_magnitude) end)
 
 -- move mouse to center center part of current screen
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', function() move_mouse_relative_to_center(direction_zero, big_bit) end)
+local moveMouseInScreenCenterCenter = function()
+    move_mouse_relative_to_center(direction_zero, moving_magnitude)
+end
+--hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', function() move_mouse_relative_to_center(direction_zero, moving_magnitude) end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', function() mouse_center() end)
 
 -- move mouse to center right part of current screen
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', function() move_mouse_relative_to_center(direction_right, big_bit) end)
+local moveMouseInScreenCenterRight = function()
+    move_mouse_relative_to_center(direction_right, moving_magnitude)
+end
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', function() move_mouse_relative_to_point(moving_center, direction_right, moving_magnitude) end)
+
 
 
 -- move mouse to lower left part of current screen
+local moveMouseInScreenLowerLeft = function()
+    move_mouse_relative_to_center(direction_down_left, moving_magnitude)
+end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', moveMouseInScreenLowerLeft)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', function() move_mouse_relative_to_center(direction_down_left, big_bit) end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', function() move_mouse_relative_to_point(moving_center, direction_down_left, moving_magnitude) end)
 
 -- move mouse to lower center part of current screen
+local moveMouseInScreenLowerCenter = function()
+    move_mouse_relative_to_center(direction_down, moving_magnitude)
+end
 -- doesn't work - used by macos
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ',', moveMouseInScreenLowerCenter)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', function() move_mouse_relative_to_center(direction_down, big_bit) end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', function() move_mouse_relative_to_point(moving_center, direction_down, moving_magnitude) end)
 
 -- move mouse to lower right part of current screen
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', function() move_mouse_relative_to_center(direction_down_right, big_bit) end)
+local moveMouseInScreenLowerRight = function()
+    move_mouse_relative_to_center(direction_down_right, moving_magnitude)
+end
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', function() move_mouse_relative_to_point(moving_center, direction_down_right, moving_magnitude) end)
 -- doesn't work - used by macos
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '.', moveMouseInScreenLowerRight)
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', function() move_mouse_relative_to_center(direction_down_right, big_bit) end)
+hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', function() move_mouse_relative_to_point(moving_center, direction_down_right, moving_magnitude) end)
+
 
 
 local small_bit = 1/12
@@ -368,6 +443,7 @@ end)
 -- Find my mouse pointer
 
 local mouseCircle = nil
+local dot = nil
 local mouseCircleTimer = nil
 
 local showMouseJumpGuides = true
