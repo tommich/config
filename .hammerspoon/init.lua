@@ -16,85 +16,116 @@
 -- end)
 
 -- Magnet replacement bindings
+local get_center_of_screen = function(screen)
+    local rect = screen:fullFrame()
+    local center = hs.geometry.rectMidPoint(rect)
+    return center
+end
+
+local get_center_of_mouse_screen = function()
+    local screen = hs.mouse.getCurrentScreen()
+    return get_center_of_screen(screen)
+end
+
+local big_magnitude = 2/6
+local moving_center = get_center_of_mouse_screen() 
+local moving_magnitude = big_magnitude 
+
 
 hs.hotkey.bind({"cmd", "ctrl", "alt"}, "l", function()
-	hs.window.focusedWindow():moveOneScreenEast()
+  local win = hs.window.focusedWindow()
+  local screen = win:screen()
+  win:moveOneScreenEast()
+  local nextScreen = screen:next()
+  local center = get_center_of_screen(nextScreen)
+  hs.mouse.absolutePosition(center)
+  mouseHighlight()
+  moving_center = center
+  moving_magnitude = big_magnitude
 end)
 
 hs.hotkey.bind({"cmd", "ctrl", "alt"}, "h", function()
-	hs.window.focusedWindow():moveOneScreenWest()
-end)
-
-hs.hotkey.bind({"cmd", "ctrl", "alt"}, "k", function()
-  -- size focused window to size of desktop
   local win = hs.window.focusedWindow()
-  local f = win:frame()
   local screen = win:screen()
-  local max = screen:frame()
-
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w
-  f.h = max.h
-  win:setFrame(f)
+  win:moveOneScreenWest()
+  local nextScreen = screen:previous()
+  local center = get_center_of_screen(nextScreen)
+  hs.mouse.absolutePosition(center)
+  mouseHighlight()
+  moving_center = center
+  moving_magnitude = big_magnitude
 end)
 
 -- resizing window 
 
+hs.hotkey.bind({"cmd", "ctrl", "alt"}, "k", function()
+  -- size focused window to size of desktop
+  local win = hs.window.focusedWindow()
+  local new_frame = win:frame()
+  local screen = win:screen()
+  local screen_frame = screen:frame()
+
+  new_frame.x = screen_frame.x
+  new_frame.y = screen_frame.y
+  new_frame.w = screen_frame.w
+  new_frame.h = screen_frame.h
+  win:setFrame(new_frame)
+end)
+
 hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "right", function()
   -- size focused window to right half of display
   local win = hs.window.focusedWindow()
-  local f = win:frame()
+  local new_frame = win:frame()
   local screen = win:screen()
-  local max = screen:frame()
+  local screen_frame = screen:frame()
 
-  f.x = max.x + (max.w / 2)
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
+  new_frame.x = screen_frame.x + (screen_frame.w / 2)
+  new_frame.y = screen_frame.y
+  new_frame.w = screen_frame.w / 2
+  new_frame.h = screen_frame.h
+  win:setFrame(new_frame)
 end)
 
 hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "left", function()
   -- size focused window to left half of display
   local win = hs.window.focusedWindow()
-  local f = win:frame()
+  local new_frame = win:frame()
   local screen = win:screen()
-  local max = screen:frame()
+  local screen_frame = screen:frame()
 
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w / 2
-  f.h = max.h
-  win:setFrame(f)
+  new_frame.x = screen_frame.x
+  new_frame.y = screen_frame.y
+  new_frame.w = screen_frame.w / 2
+  new_frame.h = screen_frame.h
+  win:setFrame(new_frame)
 end)
 
 hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "up", function()
   -- size focused window to top half of display
   local win = hs.window.focusedWindow()
-  local f = win:frame()
+  local new_frame = win:frame()
   local screen = win:screen()
-  local max = screen:frame()
+  local screen_frame = screen:frame()
 
-  f.x = max.x
-  f.y = max.y
-  f.w = max.w
-  f.h = max.h / 2
-  win:setFrame(f)
+  new_frame.x = screen_frame.x
+  new_frame.y = screen_frame.y
+  new_frame.w = screen_frame.w
+  new_frame.h = screen_frame.h / 2
+  win:setFrame(new_frame)
 end)
 
 hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "down", function()
   -- size focused window to bottom half of display
   local win = hs.window.focusedWindow()
-  local f = win:frame()
+  local new_frame = win:frame()
   local screen = win:screen()
-  local max = screen:frame()
+  local screen_frame = screen:frame()
 
-  f.x = max.x
-  f.y = max.y + (max.h / 2)
-  f.w = max.w
-  f.h = max.h / 2
-  win:setFrame(f)
+  new_frame.x = screen_frame.x
+  new_frame.y = screen_frame.y + (screen_frame.h / 2)
+  new_frame.w = screen_frame.w
+  new_frame.h = screen_frame.h / 2
+  win:setFrame(new_frame)
 end)
 
 local movementFn = function(modifier, direction) 
@@ -178,61 +209,58 @@ end
 --  print("-----")
 --end
 
-local get_center_of_mouse_screen = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local rect = screen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    return center
-end
 
-local big_magnitude = 2/6
-local moving_center = get_center_of_mouse_screen() 
-local moving_magnitude = big_magnitude 
 
 -- Move Mouse to center of next Monitor
 hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     local screen = hs.mouse.getCurrentScreen()
     local nextScreen = screen:next()
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_screen(nextScreen)
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
+    moving_magnitude = big_magnitude
 end)
 
 -- Move Mouse to center of previous Monitor
 hs.hotkey.bind({"ctrl", "alt", "shift"}, 'left', function()
     local screen = hs.mouse.getCurrentScreen()
     local nextScreen = screen:previous()
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_screen(nextScreen)
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
+    moving_magnitude = big_magnitude
 end)
 
 -- Move Mouse to center of first screen
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '1', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen:previous():previous()
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_screen(nextScreen)
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
     moving_magnitude = big_magnitude
+  
+    local frame = nextScreen:frame()
+    local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end)
 
 -- Move Mouse to center of second screen
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '2', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen:previous()
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_screen(nextScreen)
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
     moving_magnitude = big_magnitude
+
+    local frame = nextScreen:frame()
+    local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end)
 
 
@@ -240,23 +268,29 @@ end)
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '3', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_screen(nextScreen)
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
     moving_magnitude = big_magnitude
+
+    local frame = nextScreen:frame()
+    local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end)
 
 -- move mouse to center of current screen
 local mouse_center = function()
-    local screen = hs.mouse.getCurrentScreen()
-    local rect = screen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
-    hs.mouse.setAbsolutePosition(center)
+    local center = get_center_of_mouse_screen()
+    hs.mouse.absolutePosition(center)
     mouseHighlight()
     moving_center = center
     moving_magnitude = big_magnitude
+
+    local screen = hs.mouse.getCurrentScreen()
+    local frame = screen:frame()
+    local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
+    jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', mouse_center)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouse_center)
@@ -264,43 +298,26 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', mouse_center)
 local moveMouseToScreenPart = function(arg)
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    hs.mouse.setAbsolutePosition({x = frame.x + arg.horizontal * frame.w, y = frame.y + arg.vertical * frame.h})
+    hs.mouse.absolutePosition({x = frame.x + arg.horizontal * frame.w, y = frame.y + arg.vertical * frame.h})
     mouseHighlight()
 end
 
 local move_mouse_relative_to_point = function(point, direction, magnitude)
     local screen = hs.mouse.getCurrentScreen()
     local frame = screen:frame()
-    print("frame x " .. frame.x)
-    print("frame y " .. frame.y)
-    print("frame w " .. frame.w)
-    print("frame h " .. frame.h)
-
-    --these coordinates match perfectly with close window button on my screen
-    --local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
     local margined_frame = {x = frame.x + 25, y = frame.y + 40, w = frame.w - 50, h = frame.h - 80}
-    print("margined_frame x " .. margined_frame.x)
-    print("margined_frame y " .. margined_frame.y)
-    print("margined_frame w " .. margined_frame.w)
-    print("margined_frame h " .. margined_frame.h)
 
-    local not_framed_point = {x = point.x + direction.horizontal * frame.w * magnitude, y = point.y + direction.vertical * frame.h * magnitude}
-    print("not_framed_point x " .. not_framed_point.x)
-    print("not_framed_point y " .. not_framed_point.y)
-
-    --print("moving x by: " .. direction.horizontal * margined_frame.w * magnitude)
-    --print("moving y by: " .. direction.vertical * margined_frame.h * magnitude)
+    --local not_framed_point = {x = point.x + direction.horizontal * frame.w * magnitude, y = point.y + direction.vertical * frame.h * magnitude}
     local framed_point = {x = point.x + direction.horizontal * margined_frame.w * magnitude, y = point.y + direction.vertical * margined_frame.h * magnitude}
-    --print("new_point x " .. new_point.x)
-    --print("new_point y " .. new_point.y)
 
+    new_point = not_framed_point
     new_point = framed_point
 
-
-    hs.mouse.setAbsolutePosition(new_point)
+    hs.mouse.absolutePosition(new_point)
     mouseHighlight()
     moving_center = new_point
     moving_magnitude = magnitude/2
+    jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end
 
 local move_mouse_relative_to_current_position = function(direction, magnitude)
@@ -443,10 +460,7 @@ end)
 -- Find my mouse pointer
 
 local mouseCircle = nil
-local dot = nil
 local mouseCircleTimer = nil
-
-local showMouseJumpGuides = true
 
 function mouseHighlight()
     -- Delete an existing highlight if it exists
@@ -457,7 +471,7 @@ function mouseHighlight()
         end
     end
     -- Get the current co-ordinates of the mouse pointer
-    mousepoint = hs.mouse.getAbsolutePosition ()
+    mousepoint = hs.mouse.absolutePosition()
     -- Prepare a big red circle around the mouse pointer
     mouseCircle = hs.drawing.circle(hs.geometry.rect(mousepoint.x-40, mousepoint.y-40, 80, 80))
     mouseCircle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
@@ -474,8 +488,74 @@ function clearHighlight()
   mouseCircle = nil
 end
 
---HYPER TEST
+local guides = nil
+local guidesTimer = nil
 
+
+function jumpGuidesHighlight(horizontalDistance, verticalDistance)
+    -- Delete an existing highlight if it exists
+    if guides then
+        clearGuidesHighlight()
+        if guidesTimer then
+            guidesTimer:stop()
+        end
+    end
+    -- Get the current co-ordinates of the mouse pointer
+    mousepoint = hs.mouse.absolutePosition()
+
+    -- Prepare a big red circle around the mouse pointer
+    guides = {}
+
+    direction_left = {horizontal = -1, vertical = 0}
+    direction_right = {horizontal = 1, vertical = 0}
+   
+    direction_up_left = {horizontal = -1, vertical = -1}
+    direction_up_right = {horizontal = 1, vertical = -1}
+    direction_up = {horizontal = 0, vertical = -1}
+   
+    direction_down = {horizontal = 0, vertical = 1}
+    direction_down_left = {horizontal = -1, vertical = 1}
+    direction_down_right = {horizontal = 1, vertical = 1}
+
+    distance = {horizontal = horizontalDistance, vertical = verticalDistance}
+
+    guides.left = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_left, distance)
+    guides.right = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_right, distance)
+    guides.up_left = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_up_left, distance)
+    guides.up_right = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_up_right, distance)
+    guides.up = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_up, distance)
+    guides.down = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_down, distance)
+    guides.down_left = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_down_left, distance)
+    guides.down_right = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_down_right, distance)
+
+    -- Set a timer to delete the circle after x seconds
+    guidesTimer = hs.timer.doAfter(1.0, clearGuidesHighlight)
+end
+
+function drawSmallBlueCircleRelativeToPoint(point, direction, distance)
+    circle = hs.drawing.circle(hs.geometry.rect(point.x - 3 + distance.horizontal * direction.horizontal, point.y - 3 + distance.vertical * direction.vertical, 6, 6))
+    circle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
+    circle:setFill(true)
+    circle:setFillColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
+    circle:show()
+    return circle
+end
+
+function clearGuidesHighlight()
+  guides.left:delete()
+  guides.right:delete()
+  guides.up_left:delete()
+  guides.up_right:delete()
+  guides.up:delete()
+  guides.down:delete()
+  guides.down_left:delete()
+  guides.down_right:delete()
+  guides = nil
+end
+
+
+
+--HYPER TEST
 
 hyper_mode = hs.hotkey.modal.new({}, 'F18')
 function hyper_mode:entered() hs.alert.show('Entered hyper_mode', {}, 0.5) end
