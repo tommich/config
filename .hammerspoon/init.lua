@@ -1,9 +1,4 @@
-
-
-          
-   
--- print("combinations " .. tobits(5))
-
+--hello world
 -- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
 --       hs.alert.show(
 --          "Hello World!",
@@ -15,7 +10,6 @@
 --       )
 -- end)
 
--- Magnet replacement bindings
 local get_center_of_screen = function(screen)
     local rect = screen:fullFrame()
     local center = hs.geometry.rectMidPoint(rect)
@@ -182,36 +176,8 @@ end
 
 --hs.fnutils.each({ {}, {'shift'}, {'option'}, {'shift', 'option'}, {'cmd'}, {'cmd', 'shift'} }, function(modal) combineModalAndKeys(modal) end)
 
---function tobits(num)
---    local t={}
---    while num>0 do
---        rest=num%2
---        t[#t+1]=(rest == 1)
---        num=(num-rest)//2
---    end
---    return t
---end
---
-----for i,v in ipairs(tobits(5)) do print("printing " .. i .. " " .. v) end                     
---for i,v in ipairs(tobits(5)) do print(v) end                     
---
 --local all_modal_keys = {'shift', 'ctrl', 'option', 'cmd'} 
---
---count = 0
---for _ in pairs(all_modal_keys) do count = count + 1 end
---print("count " .. count)
---local modal_keys_count = count
---
---for i=1,count*2 do 
---  for i,v in ipairs(tobits(i)) do print(v) end                     
---  local boolarray = tobits(i)
---
---  print("-----")
---end
 
-
-
--- Move Mouse to center of next Monitor
 hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     local screen = hs.mouse.getCurrentScreen()
     local nextScreen = screen:next()
@@ -222,7 +188,6 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'right', function()
     moving_magnitude = big_magnitude
 end)
 
--- Move Mouse to center of previous Monitor
 hs.hotkey.bind({"ctrl", "alt", "shift"}, 'left', function()
     local screen = hs.mouse.getCurrentScreen()
     local nextScreen = screen:previous()
@@ -233,7 +198,6 @@ hs.hotkey.bind({"ctrl", "alt", "shift"}, 'left', function()
     moving_magnitude = big_magnitude
 end)
 
--- Move Mouse to center of first screen
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '1', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen:previous():previous()
@@ -248,7 +212,6 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '1', function()
     jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end)
 
--- Move Mouse to center of second screen
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '2', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen:previous()
@@ -264,7 +227,6 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '2', function()
 end)
 
 
--- Move Mouse to center of third screen
 hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '3', function()
     local screen = hs.screen.primaryScreen()
     local nextScreen = screen
@@ -279,7 +241,6 @@ hs.hotkey.bind({"ctrl", "alt", "shift", "cmd"}, '3', function()
     jumpGuidesHighlight(margined_frame.w * moving_magnitude, margined_frame.h * moving_magnitude)
 end)
 
--- move mouse to center of current screen
 local mouse_center = function()
     local center = get_center_of_mouse_screen()
     hs.mouse.absolutePosition(center)
@@ -345,40 +306,34 @@ local direction_down_right = {horizontal = 1, vertical = 1}
 
 local direction_zero = {horizontal = 0, vertical = 0}
 
--- move mouse to upper left part of current screen
 local moveMouseInScreenUpperLeft = function()
     move_mouse_relative_to_center(direction_up_left, moving_magnitude)
 end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', moveMouseInScreenUpperLeft)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'u', function() move_mouse_relative_to_point(moving_center, direction_up_left, moving_magnitude) end)
 
--- move mouse to upper center part of current screen
 local moveMouseInScreenUpperCenter = function()
     move_mouse_relative_to_center(direction_up, moving_magnitude)
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'i', function() move_mouse_relative_to_point(moving_center, direction_up, moving_magnitude) end)
 
--- move mouse to upper right part of current screen
 local moveMouseInScreenUpperRight = function()
     move_mouse_relative_to_center(direction_up_right, moving_magnitude)
 end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', moveMouseInScreenUpperRight)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'o', function() move_mouse_relative_to_point(moving_center, direction_up_right, moving_magnitude) end)
 
--- move mouse to center left part of current screen
 local moveMouseInScreenCenterLeft = function()
     move_mouse_relative_to_center(direction_left, moving_magnitude)
 end
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'j', function() move_mouse_relative_to_point(moving_center, direction_left, moving_magnitude) end)
 
--- move mouse to center center part of current screen
 local moveMouseInScreenCenterCenter = function()
     move_mouse_relative_to_center(direction_zero, moving_magnitude)
 end
 --hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', function() move_mouse_relative_to_center(direction_zero, moving_magnitude) end)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'k', function() mouse_center() end)
 
--- move mouse to center right part of current screen
 local moveMouseInScreenCenterRight = function()
     move_mouse_relative_to_center(direction_right, moving_magnitude)
 end
@@ -386,14 +341,12 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'l', function() move_mouse_r
 
 
 
--- move mouse to lower left part of current screen
 local moveMouseInScreenLowerLeft = function()
     move_mouse_relative_to_center(direction_down_left, moving_magnitude)
 end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', moveMouseInScreenLowerLeft)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'm', function() move_mouse_relative_to_point(moving_center, direction_down_left, moving_magnitude) end)
 
--- move mouse to lower center part of current screen
 local moveMouseInScreenLowerCenter = function()
     move_mouse_relative_to_center(direction_down, moving_magnitude)
 end
@@ -401,7 +354,6 @@ end
 -- hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ',', moveMouseInScreenLowerCenter)
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, '[', function() move_mouse_relative_to_point(moving_center, direction_down, moving_magnitude) end)
 
--- move mouse to lower right part of current screen
 local moveMouseInScreenLowerRight = function()
     move_mouse_relative_to_center(direction_down_right, moving_magnitude)
 end
@@ -414,33 +366,22 @@ hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, ']', function() move_mouse_r
 
 local small_bit = 1/12
 
-
--- move mouse left
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 's', function() move_mouse_relative_to_current_position(direction_left, small_bit) end)
 
--- move mouse right
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'f', function() move_mouse_relative_to_current_position(direction_right, small_bit) end)
 
--- move mouse up-left
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'w', function() move_mouse_relative_to_current_position(direction_up_left, small_bit) end)
 
--- move mouse up-right
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'r', function() move_mouse_relative_to_current_position(direction_up_right, small_bit) end)
 
--- move mouse up
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'e', function() move_mouse_relative_to_current_position(direction_up, small_bit) end)
 
-
--- move mouse down
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'c', function() move_mouse_relative_to_current_position(direction_down, small_bit) end)
 
--- move mouse down
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'd', function() move_mouse_relative_to_current_position(direction_down, small_bit) end)
 
--- move mouse down-left
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'x', function() move_mouse_relative_to_current_position(direction_down_left, small_bit) end)
 
--- move mouse down-right
 hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'v', function() move_mouse_relative_to_current_position(direction_down_right, small_bit) end)
 
 
@@ -449,16 +390,7 @@ local rect = screen:fullFrame()
 local center = hs.geometry.rectMidPoint(rect)
 
 
-
--- get screen positions
-hs.hotkey.bind({"ctrl", "alt", "shift", 'command'}, 'p', function()
-    local positions = hs.screen.screenPositions()
-end)
-
----- Mouse-related stuff
-
 -- Find my mouse pointer
-
 local mouseCircle = nil
 local mouseCircleTimer = nil
 
@@ -503,7 +435,6 @@ function jumpGuidesHighlight(horizontalDistance, verticalDistance)
     -- Get the current co-ordinates of the mouse pointer
     mousepoint = hs.mouse.absolutePosition()
 
-    -- Prepare a big red circle around the mouse pointer
     guides = {}
 
     direction_left = {horizontal = -1, vertical = 0}
@@ -528,7 +459,6 @@ function jumpGuidesHighlight(horizontalDistance, verticalDistance)
     guides.down_left = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_down_left, distance)
     guides.down_right = drawSmallBlueCircleRelativeToPoint(mousepoint, direction_down_right, distance)
 
-    -- Set a timer to delete the circle after x seconds
     guidesTimer = hs.timer.doAfter(1.0, clearGuidesHighlight)
 end
 
