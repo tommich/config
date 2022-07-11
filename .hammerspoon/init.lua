@@ -1,3 +1,18 @@
+--WINDOW SWITCHER
+-- set up your windowfilter
+switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
+--switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{}) -- include minimized/hidden windows, current Space only
+--switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
+
+-- bind to hotkeys; WARNING: at least one modifier key is required!
+hs.hotkey.bind('alt','tab',function()switcher:next()end)
+hs.hotkey.bind('alt-shift','tab',function()switcher:previous()end)
+
+
+hs.window.animationDuration = 0
+--WINDOW SWITCHER
+
+
 --hello world
 -- hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
 --       hs.alert.show(
@@ -51,8 +66,7 @@ hs.hotkey.bind({"cmd", "ctrl", "alt"}, "h", function()
 end)
 
 -- resizing window 
-
-hs.hotkey.bind({"cmd", "ctrl", "alt"}, "k", function()
+local fullscreen = function()
   -- size focused window to size of desktop
   local win = hs.window.focusedWindow()
   local new_frame = win:frame()
@@ -64,7 +78,11 @@ hs.hotkey.bind({"cmd", "ctrl", "alt"}, "k", function()
   new_frame.w = screen_frame.w
   new_frame.h = screen_frame.h
   win:setFrame(new_frame)
-end)
+end
+
+hs.hotkey.bind({"cmd", "ctrl", "alt"}, "k", fullscreen)
+hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "up", fullscreen)
+
 
 hs.hotkey.bind({"ctrl", "alt", "cmd", "shift"}, "right", function()
   -- size focused window to right half of display
@@ -487,9 +505,9 @@ end
 
 --HYPER TEST
 
-hyper_mode = hs.hotkey.modal.new({}, 'F18')
-function hyper_mode:entered() hs.alert.show('Entered hyper_mode', {}, 0.5) end
-function hyper_mode:exited()  hs.alert.show('Exited hyper_mode', {}, 0.5)  end
-hyper_mode:bind({}, 'F18', function() hyper_mode:exit() end)
-hyper_mode:bind({"ctrl", "alt", "shift", 'command'}, 'h', function() hs.alert.show('Hyper hello world!', {}, 0.5) end)
+-- hyper_mode = hs.hotkey.modal.new({}, 'F18')
+-- function hyper_mode:entered() hs.alert.show('Entered hyper_mode', {}, 0.5) end
+-- function hyper_mode:exited()  hs.alert.show('Exited hyper_mode', {}, 0.5)  end
+-- hyper_mode:bind({}, 'F18', function() hyper_mode:exit() end)
+-- hyper_mode:bind({"ctrl", "alt", "shift", 'command'}, 'h', function() hs.alert.show('Hyper hello world!', {}, 0.5) end)
 
