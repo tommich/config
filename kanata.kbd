@@ -1,0 +1,60 @@
+(defcfg
+  process-unmapped-keys no
+  log-layer-changes no
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    scln '    ret
+  lsft nubs z    x    c    v    b    n    m    ,    .    /    rsft
+  fn   f1   f2   f3   f7   f8   f9   f10  f11  f12
+                      spc
+)
+
+(defvar
+  tap-time 200
+  hold-time 280
+)
+
+(defalias
+  a    (tap-hold-release $tap-time $hold-time a    lsft)
+  s    (tap-hold-release $tap-time $hold-time s    lctl)
+  d    (tap-hold-release $tap-time $hold-time d    lalt)
+  f    (tap-hold-release $tap-time $hold-time f    lmet)
+
+  j    (tap-hold-release $tap-time $hold-time j    rmet)
+  k    (tap-hold-release $tap-time $hold-time k    ralt)
+  l    (tap-hold-release $tap-time $hold-time l    rctl)
+  scln (tap-hold-release $tap-time $hold-time scln rsft)
+
+  spc  (tap-hold-release $tap-time $hold-time spc (layer-while-held nav))
+  fn   (layer-while-held fn)
+)
+
+(deflayer base
+  nubs _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    q    w    e    r    t    y    u    i    o    p    _    _    _
+  _    @a   @s   @d   @f   g    h    @j   @k   @l   @scln _   _
+  _    grv  z    x    c    v    b    n    m    ,    .    /    _
+  @fn  _    _    _    _    _    _    _    _    _
+                      @spc
+)
+
+(deflayer nav
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    tab  bspc up   del  _    _    _    _    _    _    _    _    _
+  _    esc  lft  down rght _    _    _    _    _    _    _    _
+  _    _    _    _    ret  ret  _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _
+                      _
+)
+
+(deflayer fn
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    brdn brup _    prev pp   next mute vold volu
+                      _
+)
