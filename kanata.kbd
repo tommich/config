@@ -10,27 +10,17 @@
 
 (deflayer qwerty
   esc f1    f2   f3   f4   f5  f6    f7   f8   f9   f10   f11   f12
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps @a    @s    @d    @f    g    h    @j    @k    @l    @;    '    ret
-  lsft grv z    @x    c    @v    b    n    m    ,    .    /    rsft
+  lsft grv @z    @x    c    @v    b    n    m    ,    .    /    rsft
   lctl lmet lalt           @spc            ralt rmet rctl
   @fn
 )
 
-(deflayer arrow_layer
-  esc f1    f2   f3   f4   f5  f6    f7   f8   f9   f10   f11   f12
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =   bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  caps @a    @s    @d    @f    g     left  down up   right  ;    '    ret
-  lsft grv z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet rctl
-  fn
-)
 
 (defalias
   caps (tap-hold-press 200 200 caps lctl)
-  grv (tap-hold-press 200 200 nubs (layer-toggle arrow_layer))
   spc (tap-hold-release 200 200 spc (layer-toggle nav_layer_left))
   v (tap-hold-release 200 200 v (layer-toggle numbers_v))
   x (tap-hold-release 200 200 x (layer-toggle symbols))
@@ -47,6 +37,7 @@
   f (tap-hold-release 200 200 f lmet)
 
   fn (tap-hold 200 200 fn (layer-toggle fn))
+  z (tap-hold-release 200 200 z (layer-toggle fkeys_z))
 )
 
 
@@ -65,7 +56,7 @@
 ;; Some keys are missing: `Mission Control`, `Launchpad`, `dictation`, ` Do Not Disturb`
 (deflayer fn
   esc brdn  brup  _    _    _    _   prev  pp  next  mute  vold  volu
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps @a    @s    @d    @f    g    h    @j    @k    @l    @;    '    ret
   lsft grv z    x    c    v    b    n    m    ,    .    /    rsft
@@ -75,7 +66,7 @@
 
 (deflayer numbers_v
   esc f1    f2   f3   f4   f5  f6    f7   f8   f9   f10   f11   f12
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab 1    2    3   r    t    y    u    i    o    p    [    ]    \
   caps 4    5    6   @f    g    h    @j    @k    @l    @;    '    ret
   lsft grv 7    8    9    @v    b    n    m    ,    .    /    rsft
@@ -83,24 +74,22 @@
   @fn
 )
 
-
-(deflayer numbers_z
-  esc f1    f2   f3   f4   f5  f6    f7   f8   f9   f10   f11   f12
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    1    2    3   t    y    u    i    o    p    [    ]    \
-  caps @a    4    5    6     g    h    @j    @k    @l    @;    '    ret
-  lsft grv z    7    8    9     0    n    m    ,    .    /    rsft
-  lctl lmet lalt           @spc            ralt rmet rctl
-  @fn
-)
-
-
 (deflayer symbols
   esc f1    f2   f3   f4   f5  f6    f7   f8   f9   f10   f11   f12
-  @grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    \    y    u    i    o    p    [    ]    \
   caps '    @s   [   ]       =    h    @j    @k    @l    @;    '    ret
   lsft grv nubs    x    S-9    S-0    -    n    m    ,    .    /    rsft
   lctl lmet lalt           \            ralt rmet rctl
   @fn
+)
+
+(deflayer fkeys_z
+  _    _     _    _    _    _    _    _    _    _    _     _     _
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    f1   f2   f3   f10   _    _    _    _    _    _    _    _
+  _    _    f4   f5   f6   f11   _    _    _    _    _    _    _
+  _    _    _    f7   f8   f9   f12   _    _    _    _    _    _
+  _    _    _              _              _    _    _
+  _
 )
